@@ -21,11 +21,21 @@ app.get("/", async (req,res) => {
     }
 });
 
-addEventListener.get("/create", (req,res) =>{
+app.get("/book/:id", async (req,res) =>{
+    try{
+        const response =await axios.get(base_url + '/books/' + req.params.id);
+        res.render("book", {book: response.data});
+    }catch (err){
+        console.error(err);
+        res.status(500).send('Error');
+    }
+});
+
+app.get("/create", (req,res) =>{
     res.render("create");
 });
 
-addEventListener.post("/create",async (req,res) =>{
+app.post("/create",async (req,res) =>{
     try {
         const data = { title: req.body.title, author: req.body.author};
         await axios.post(base_url + '/books',data);
